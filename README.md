@@ -7,7 +7,7 @@ Original code [by Colton Ogden](https://cs50.harvard.edu/games/2018/projects/3/m
 Assignment:
 
 1. ~~Implement time addition on matches (+1 second per matched tile)~~
-2. Ensure Level 1 starts just with simple flat blocks, with later levels generating the blocks with patterns on them, which are worth more points
+2. ~~Ensure Level 1 starts just with simple flat blocks, with later levels generating the blocks with patterns on them, which are worth more points~~
 3. Create random shiny versions of blocks that will destroy an entire row on match, granting points for each block in the row.
 4. Only allow swapping when it results in a match. If there are no matches available to perform, reset the board.
 5. (Optional) Implement matching using the mouse. 

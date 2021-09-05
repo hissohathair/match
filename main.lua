@@ -44,13 +44,20 @@ VIRTUAL_HEIGHT = 288
 -- speed at which our background texture will scroll
 BACKGROUND_SCROLL_SPEED = 40
 
+-- debug mode on or off
+DEBUG_MODE = true
+
 function love.load()
     
     -- window bar title
     love.window.setTitle('Match 3')
 
     -- seed the RNG
-    math.randomseed(os.time())
+    if DEBUG_MODE then
+        math.randomseed(1)
+    else
+        math.randomseed(os.time())
+    end
 
     -- initialize our virtual resolution
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
