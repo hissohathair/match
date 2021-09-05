@@ -80,7 +80,7 @@ function StartState:update(dt)
         end
 
         -- switch to another state via one of the menu options
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('return') then
             if self.currentMenuItem == 1 then
                 
                 -- tween, using Timer, the transition rect's alpha to 1, then

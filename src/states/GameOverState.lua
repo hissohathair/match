@@ -21,7 +21,7 @@ function GameOverState:enter(params)
 end
 
 function GameOverState:update(dt)
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('return') then
         gStateMachine:change('start')
     end
 end
