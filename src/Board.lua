@@ -259,10 +259,29 @@ function Board:getFallingTiles()
     return tweens
 end
 
+function Board:update(dt)
+    for y = 1, #self.tiles do
+        for x = 1, #self.tiles[1] do
+            self.tiles[y][x]:update(dt)
+        end
+    end
+
+end
+
 function Board:render()
+    -- first, render all tiles
     for y = 1, #self.tiles do
         for x = 1, #self.tiles[1] do
             self.tiles[y][x]:render(self.x, self.y)
+        end
+    end
+
+    -- last, render any particle effects
+    for y = 1, #self.tiles do
+        for x = 1, #self.tiles[1] do
+            if self.tiles[y][x].shiny then
+                self.tiles[y][x]:renderParticles(self.x, self.y)
+            end
         end
     end
 end

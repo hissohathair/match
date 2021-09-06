@@ -181,6 +181,9 @@ function PlayState:update(dt)
     end
 
     Timer.update(dt)
+
+    -- update the board just for the particle effects
+    self.board:update(dt)
 end
 
 --[[
