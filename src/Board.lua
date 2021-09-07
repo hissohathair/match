@@ -21,7 +21,7 @@ function Board:init(x, y, level)
     -- level determines color and varierty of tiles to be generated
     self.level = level
     self.maxVariety = math.min(level, 6)
-    self.maxColor = level < 3 and 9 or 18
+    self.maxColor = math.min(5 + level, 18)
 
     self:initializeTiles()
 end
