@@ -71,9 +71,6 @@ function PlayState:enter(params)
 
     -- score we have to reach to get to the next level
     self.scoreGoal = self.level * 1.25 * 1000
-    if DEBUG_MODE then
-        self.scoreGoal = self.scoreGoal / 2
-    end
 end
 
 function PlayState:update(dt)
@@ -167,7 +164,7 @@ function PlayState:update(dt)
                 self.board.tiles[newTile.gridY][newTile.gridX] = newTile
 
                 -- tween coordinates between the two so they swap
-                Timer.tween(0.1, {
+                Timer.tween(0.3, {
                     [self.highlightedTile] = {x = newTile.x, y = newTile.y},
                     [newTile] = {x = self.highlightedTile.x, y = self.highlightedTile.y}
                 })
@@ -202,13 +199,21 @@ function PlayState:calculateMatches()
         gSounds['match']:stop()
         gSounds['match']:play()
 
+        local shinyMatchMade = false
+
         -- add score for each match, and add 1 sec per matched tile
         for k, match in pairs(matches) do
             self.timer = self.timer + #match
             -- self.score = self.score + #match * 50
             for l, tile in pairs(match) do
                 self.score = self.score + 50 * tile.variety
+                shinyMatchMade = shinyMatchMade or tile.shiny
             end
+        end
+
+        -- play special sound if a whole row or column was matched
+        if shinyMatchMade then
+            gSounds['match-shiny']:play()
         end
 
         -- remove any tiles that matched from the board, making empty spaces

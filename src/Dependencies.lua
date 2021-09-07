@@ -47,13 +47,14 @@ gSounds = {
     ['match'] = love.audio.newSource('sounds/match.wav', 'static'),
     ['clock'] = love.audio.newSource('sounds/clock.wav', 'static'),
     ['game-over'] = love.audio.newSource('sounds/game-over.wav', 'static'),
-    ['next-level'] = love.audio.newSource('sounds/next-level.wav', 'static')
+    ['next-level'] = love.audio.newSource('sounds/next-level.wav', 'static'),
+    ['match-shiny'] = love.audio.newSource('sounds/match-row.wav', 'static')
 }
 
 gTextures = {
     ['main'] = love.graphics.newImage('graphics/match3.png'),
     ['background'] = love.graphics.newImage('graphics/background.png'),
-    ['particle'] = love.graphics.newImage('graphics/particle.png')
+    ['particle'] = love.graphics.newImage('graphics/particle2.png')
 }
 
 gFrames = {

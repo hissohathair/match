@@ -45,7 +45,7 @@ VIRTUAL_HEIGHT = 288
 BACKGROUND_SCROLL_SPEED = 40
 
 -- debug mode on or off
-DEBUG_MODE = true
+DEBUG_MODE = false
 
 function love.load()
     
@@ -116,6 +116,15 @@ function love.update(dt)
     end
 
     gStateMachine:update(dt)
+
+    -- process some global keys
+    if love.keyboard.wasPressed('m') then
+        if gSounds['music']:isPlaying() then
+            gSounds['music']:pause()
+        else
+            gSounds['music']:play()
+        end
+    end
 
     love.keyboard.keysPressed = {}
 end

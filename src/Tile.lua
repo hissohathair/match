@@ -42,6 +42,9 @@ local PARTICLE_COLORS = {
     [99] = rgb(251, 242, 54)
 }
 
+-- Shiny tiles have a 1 in SHINY_CHANCE probability
+local SHINY_CHANCE = 8 * 8
+
 function Tile:init(x, y, color, variety)
     
     -- board positions
@@ -55,7 +58,7 @@ function Tile:init(x, y, color, variety)
     -- tile appearance/points
     self.color = color
     self.variety = variety
-    self.shiny = math.random(10) == 1 and true or false
+    self.shiny = math.random(SHINY_CHANCE) == 1 and true or false
 
     -- particle system for "shiny" tiles
     self.particles = nil
@@ -72,22 +75,19 @@ function Tile:initParticles()
     self.particles:setLinearAcceleration(-32, -32, 32, 32)
     self.particles:setRotation( math.pi / 2, math.pi * 2 )
     self.particles:setSpin( math.pi / 2, math.pi * 2 )
-    self.particles:setEmissionArea('normal', 8, 8)
+    self.particles:setEmissionArea('uniform', 8, 8)
+    self.particles:setEmissionRate(16)
+    self.particles:setAreaSpread('uniform', 12, 12, 0, false)
+    self.particles:setSizeVariation(1)
+    self.particles:setSizes(0.5, 0.75, 0.9, 1.0, 1.05, 1.15)
 
     local c1 = PARTICLE_COLORS[self.color]
     local c2 = PARTICLE_COLORS[99]
-    self.particles:setColors(c1['r'], c1['g'], c1['b'], 0.7, c2['r'], c2['g'], c2['b'], 0.1)
-    self.particles:emit(4)
-    self.lastEmit = 0
+    self.particles:setColors(c2['r'], c2['g'], c2['b'], 0.8, c1['r'], c1['g'], c1['b'], 0.1)
 end
 
 function Tile:update(dt)
     if self.particles then
-        self.lastEmit = self.lastEmit + dt
-        if self.lastEmit > 0.1 then
-            self.particles:emit(4)
-            self.lastEmit = 0
-        end
         self.particles:update(dt)
     end
 end

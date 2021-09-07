@@ -79,12 +79,26 @@ function Board:calculateMatches()
                 -- if we have a match of 3 or more up to now, add it to our matches table
                 if matchNum >= 3 then
                     local match = {}
+                    local rowHasShiny = false
 
                     -- go backwards from here by matchNum
                     for x2 = x - 1, x - matchNum, -1 do
-                        
                         -- add each tile to the match that's in that match
                         table.insert(match, self.tiles[y][x2])
+                        rowHasShiny = rowHasShiny or self.tiles[y][x2].shiny
+                    end
+
+                    -- if a tile was shiny, add the rest of the row
+                    if rowHasShiny then
+                        -- add the "head" of the row
+                        for i = x - matchNum - 1, 1, -1 do
+                            table.insert(match, self.tiles[y][i])
+                        end
+
+                        -- add the "tail" of the row
+                        for i = x, 8 do
+                            table.insert(match, self.tiles[y][i])
+                        end
                     end
 
                     -- add this match to our total matches table
@@ -103,15 +117,25 @@ function Board:calculateMatches()
         -- account for the last row ending with a match
         if matchNum >= 3 then
             local match = {}
+            local rowHasShiny = false
             
             -- go backwards from end of last row by matchNum
             for x = 8, 8 - matchNum + 1, -1 do
                 table.insert(match, self.tiles[y][x])
+                rowHasShiny = rowHasShiny or self.tiles[y][x].shiny
+            end
+
+            -- keep going backwards if that last match included a shiny tile
+            if rowHasShiny then
+                for x = 8 - matchNum, 1, -1 do
+                    table.insert(match, self.tiles[y][x])
+                end
             end
 
             table.insert(matches, match)
         end
     end
+
 
     -- vertical matches
     for x = 1, 8 do
@@ -128,9 +152,23 @@ function Board:calculateMatches()
 
                 if matchNum >= 3 then
                     local match = {}
+                    local colHasShiny = false
 
                     for y2 = y - 1, y - matchNum, -1 do
                         table.insert(match, self.tiles[y2][x])
+                        colHasShiny = colHasShiny or self.tiles[y2][x].shiny
+                    end
+
+                    if colHasShiny then
+                        -- add the "head" of the column
+                        for i = y - matchNum - 1, 1, -1 do
+                            table.insert(match, self.tiles[i][x])
+                        end
+
+                        -- add the "tail" of the column
+                        for i = y, 8 do
+                            table.insert(match, self.tiles[i][x])
+                        end
                     end
 
                     table.insert(matches, match)
@@ -148,10 +186,19 @@ function Board:calculateMatches()
         -- account for the last column ending with a match
         if matchNum >= 3 then
             local match = {}
+            local colHasShiny = false
             
             -- go backwards from end of last row by matchNum
             for y = 8, 8 - matchNum + 1, -1 do
                 table.insert(match, self.tiles[y][x])
+                colHasShiny = colHasShiny or self.tiles[y][x].shiny
+            end
+
+            -- if column had a shiny, keep moving back
+            if colHasShiny then
+                for y = 8 - matchNum, 1, -1 do
+                    table.insert(match, self.tiles[y][x])
+                end
             end
 
             table.insert(matches, match)
