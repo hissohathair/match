@@ -48,7 +48,8 @@ gSounds = {
     ['clock'] = love.audio.newSource('sounds/clock.wav', 'static'),
     ['game-over'] = love.audio.newSource('sounds/game-over.wav', 'static'),
     ['next-level'] = love.audio.newSource('sounds/next-level.wav', 'static'),
-    ['match-shiny'] = love.audio.newSource('sounds/match-row.wav', 'static')
+    ['match-shiny'] = love.audio.newSource('sounds/match-row.wav', 'static'),
+    ['reset'] = love.audio.newSource('sounds/reset.wav', 'static')
 }
 
 gTextures = {

@@ -32,7 +32,7 @@ function Board:init(x, y, level)
     -- level determines color and varierty of tiles to be generated
     self.level = level
     self.maxVariety = math.min(level, 6)
-    self.maxColor = math.min(3 + level, 8)
+    self.maxColor = math.min(3 + self.level, 8)
 
     self:initializeTiles()
 end
@@ -239,6 +239,21 @@ function Board:removeMatches()
 end
 
 --[[
+    Clear the board of all tiles, for example if the board has no
+    legal moves and needs to be reset.
+]]
+function Board:clear()
+    for y = 1, 8 do
+        for x = 1, 8 do
+            self.tiles[y][x] = nil
+        end
+    end
+    -- new color scheme, why not?
+    self.scheme = math.random(1, table.getn(COLOR_SCHEMES))
+end
+
+
+--[[
     Shifts down all of the tiles that now have spaces below them, then returns a table that
     contains tweening information for these new tiles.
 ]]
@@ -317,6 +332,68 @@ function Board:getFallingTiles()
     end
 
     return tweens
+end
+
+--[[ 
+    Swaps tile y1,x1 with tile y2,x2. Does NOT change the tile's internal
+    state, so their gridX and gridY and graphics x,y positions are not changed.
+]]
+function Board:swapTiles(y1, x1, y2, x2)
+    local tempTile = self.tiles[y1][x1]
+    self.tiles[y1][x1] = self.tiles[y2][x2]
+    self.tiles[y2][x2] = tempTile
+end
+
+
+--[[
+    Returns `true` if the current board has at least one legal move, which is a move
+    that will result in a match.
+]]
+function Board:hasLegalMoves()
+    -- if there are matches right now, board is still legal
+    local matches = self:calculateMatches()
+    if matches then
+        return true
+    end
+
+    -- assume no matches are possible
+    matchPossible = false
+
+    -- We'll take each tile and try and swap it to the right, and then down.
+    -- We don't need to swap "left" or "up" because that will be the same as 
+    -- swapping with right/down, just starting with the other tile.
+
+    for y = 1, 7 do
+        for x = 1, 7 do
+            -- can we swap this tile right?
+            self:swapTiles(y, x, y, x + 1)
+            matches = self:calculateMatches()
+            if matches then
+                matchPossible = true
+            end
+
+            -- swap back
+            self:swapTiles(y, x + 1, y, x)
+
+            -- can we swap this tile down?
+            self:swapTiles(y, x, y + 1, x)
+            matches = self:calculateMatches()
+            if matches then
+                matchPossible = true
+            end
+
+            -- swap back. If either of those worked, fall out of the loop
+            self:swapTiles(y + 1, x, y, x)
+            if matchPossible then
+                break
+            end
+        end
+
+        if matchPossible then
+            break
+        end
+    end
+    return matchPossible
 end
 
 function Board:update(dt)

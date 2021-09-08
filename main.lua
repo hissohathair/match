@@ -45,7 +45,7 @@ VIRTUAL_HEIGHT = 288
 BACKGROUND_SCROLL_SPEED = 40
 
 -- debug mode on or off
-DEBUG_MODE = false
+DEBUG_MODE = true
 
 function love.load()
     
