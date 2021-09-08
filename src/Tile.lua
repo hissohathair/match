@@ -77,7 +77,6 @@ function Tile:initParticles()
     self.particles:setSpin( math.pi / 2, math.pi * 2 )
     self.particles:setEmissionArea('uniform', 8, 8)
     self.particles:setEmissionRate(16)
-    self.particles:setAreaSpread('uniform', 12, 12, 0, false)
     self.particles:setSizeVariation(1)
     self.particles:setSizes(0.5, 0.75, 0.9, 1.0, 1.05, 1.15)
 
