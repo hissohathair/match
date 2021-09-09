@@ -132,27 +132,39 @@ function PlayState:update(dt)
 
 
         else
+            -- handle mouse movement
+            if love.mouse.isDown(1) then
+                -- convert mouse x,y to tile grid position
+                local x, y = love.mouse.getPosition()
+                x, y = push:toGame(x, y)
+                x = math.floor((x - self.board.x) / 32) + 1
+                y = math.floor((y - self.board.y) / 32) + 1
+
+                if x >= 1 and x <= 8 and y >= 1 and y <= 8 then
+                    self.boardHighlightX = x - 1
+                    self.boardHighlightY = y - 1
+                end
+            end
+
             -- handle mouse clicks
             if love.mouse.mouseClicked then
                 -- convert to tile grid position
                 local x = math.floor((love.mouse.mouseClicked['x'] - self.board.x) / 32) + 1
                 local y = math.floor((love.mouse.mouseClicked['y'] - self.board.y) / 32) + 1
 
-                print(string.format("DEBUG: Tile clicked %d,%d", x, y))
                 -- ignore "off-board" clicks
                 if x >= 1 and x <= 8 and y >= 1 and y <= 8 then
-                    
+                    gSounds['click']:stop()
+                    gSounds['click']:play()
                     if self.highlightedTile then
                         -- tile already selected, only move if different
                         if self.highlightedTile ~= self.board.tiles[y][x] then
-                            gSounds['click']:play()
                             self.highlightedTile = self.board.tiles[y][x]
                             self.boardHighlightX = x - 1
                             self.boardHighlightY = y - 1
                         end
                     else
                         -- no tile selected, select this tile
-                        gSounds['click']:play()  
                         self.highlightedTile = self.board.tiles[y][x]
                         self.boardHighlightX = x - 1
                         self.boardHighlightY = y - 1
@@ -163,15 +175,18 @@ function PlayState:update(dt)
                 -- convert to tile grid position
                 local x = math.floor((love.mouse.mouseReleased['x'] - self.board.x) / 32) + 1
                 local y = math.floor((love.mouse.mouseReleased['y'] - self.board.y) / 32) + 1
-                print(string.format("DEBUG: Tile released %d,%d, board cursor at %d,%d", x, y, self.boardHighlightX + 1, self.boardHighlightY + 1))
 
                 -- ignore "off-board" or out of range releases
                 if x < 1 or x > 8 or y < 1 or y > 8 then
                     gSounds['error']:play()
                     self.highlightedTile = nil
 
+                -- ignore if no tile highlighted for whatever reason
+                elseif self.highlightedTile == nil then
+                    gSounds['error']:play()
+
                 -- ignore if user released on highlighted tile
-                elseif self.boardHighlightX + 1 == x and self.boardHighlightY + 1 == y then
+                elseif self.highlightedTile.gridX == x and self.highlightedTile.gridY == y then
                     -- do nothing
 
                 -- tiles have to be "next to" (diagonal doesn't count)
