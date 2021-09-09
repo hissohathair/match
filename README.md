@@ -20,10 +20,13 @@ Keys:
 * *space* or *enter*: Select item or tile
 * *left*, *right*, *up*, *down* arrows: Move selection cursor
 * *escape*: Quit game
+* *m*: Toggle Music on or off
+* *x*: (Debug Mode only) Clear the board, as if no legal moves were available
 
 
 # Bugs and Todos
 
+* Setting `DEBUG_MODE` to `true` in `main.lua` will extend time limits and allow the board to be reset with 'x'
 * Fixed a bug in some calls to `setColor` which still used values 0-255 instead of 0-1.
 
 
@@ -31,3 +34,4 @@ Keys:
 
 * Most of this code was written [by Colton Ogden](https://cs50.harvard.edu/games/2018/projects/3/match/) for the [CS50G EdX course](https://learning.edx.org/course/course-v1:HarvardX+CS50G+Games/home)
 * Using [boon](https://github.com/camchenry/boon) to package releases
+* Additional sound effects created with [Bfxr](https://www.bfxr.net/)

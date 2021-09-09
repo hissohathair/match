@@ -69,7 +69,9 @@ function love.load()
 
     -- set music to loop and start
     gSounds['music']:setLooping(true)
-    gSounds['music']:play()
+    if not DEBUG_MODE then
+        gSounds['music']:play()
+    end
 
     -- initialize state machine with all state-returning functions
     gStateMachine = StateMachine {
@@ -85,6 +87,9 @@ function love.load()
 
     -- initialize input table
     love.keyboard.keysPressed = {}
+    love.mouse.mouseClicked = nil
+    love.mouse.mouseReleased = nil
+
 end
 
 function love.resize(w, h)
@@ -104,6 +109,34 @@ function love.keyboard.wasPressed(key)
         return false
     end
 end
+
+
+--[[
+    Called by Love2D when user clicks. Record the x,y and convert to `push`
+    coordinates.
+]]
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 or istouch then
+        x, y = push:toGame(x, y)
+        if x and y then
+            love.mouse.mouseClicked = { ['x'] = x, ['y'] = y }
+        end
+    end
+end
+
+--[[
+    Called by Love2D when user releases mouse (or lifts finger from touchpad).
+    Converts the x,y coordimates to `push` coordinates.
+]]
+function love.mousereleased(x, y, button, istouch, presses)
+    if button == 1 or istouch then
+        x, y = push:toGame(x, y)
+        if x and y then
+            love.mouse.mouseReleased = { ['x'] = x, ['y'] = y }
+        end
+    end
+end
+
 
 function love.update(dt)
     
@@ -127,6 +160,8 @@ function love.update(dt)
     end
 
     love.keyboard.keysPressed = {}
+    love.mouse.mouseClicked = nil
+    love.mouse.mouseReleased = nil
 end
 
 function love.draw()
