@@ -45,7 +45,7 @@ VIRTUAL_HEIGHT = 288
 BACKGROUND_SCROLL_SPEED = 40
 
 -- debug mode on or off
-DEBUG_MODE = true
+DEBUG_MODE = false
 
 function love.load()
     
@@ -158,7 +158,11 @@ function love.update(dt)
             gSounds['music']:play()
         end
     end
+    if love.keyboard.wasPressed('escape') then
+        love.event.quit()
+    end
 
+    -- reset keyboard and mouse state
     love.keyboard.keysPressed = {}
     love.mouse.mouseClicked = nil
     love.mouse.mouseReleased = nil
