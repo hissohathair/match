@@ -79,8 +79,39 @@ function StartState:update(dt)
             gSounds['select']:play()
         end
 
+        -- change menu item based on mouse click
+        local menuItemSelected = false
+        if love.mouse.mouseClicked then
+            local x, y = love.mouse.mouseClicked['x'], love.mouse.mouseClicked['y']
+
+            -- these constants from drawOptions below
+            local startGameY = VIRTUAL_HEIGHT / 2 + 12 + 8
+            local quitGameY = VIRTUAL_HEIGHT / 2 + 12 + 33
+            local menuItemHeight = quitGameY - startGameY
+            local menuX = VIRTUAL_WIDTH / 2 - 76
+            local menuWidth = 150
+
+            -- is click in range?
+            local lastMenuItem = self.currentMenuItem
+            if x >= menuX and x <= menuX + menuWidth and y >= startGameY and y <= quitGameY + menuItemHeight then
+                print(string.format("DEBUG: Click at %d,%d -- %d <= %d <= %d and %d <= %d <= %d", 
+                    x, y, menuX, x, menuX + menuWidth, startGameY, y, quitGameY + menuItemHeight))
+
+                if y >= startGameY and y <= startGameY + menuItemHeight then
+                    self.currentMenuItem = 1
+                else
+                    self.currentMenuItem = 2
+                end
+
+                -- if user clicked the currentMenuItem again, treat it as selected
+                if lastMenuItem == self.currentMenuItem then
+                    menuItemSelected = true
+                end
+            end
+        end
+
         -- switch to another state via one of the menu options
-        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('return') then
+        if menuItemSelected or love.keyboard.wasPressed('space') or love.keyboard.wasPressed('return') then
             if self.currentMenuItem == 1 then
                 
                 -- tween, using Timer, the transition rect's alpha to 1, then
